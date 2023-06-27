@@ -3,7 +3,7 @@ package Controlador;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Usuario {
+public  class Usuario {
 
     private long id;
     private String dni;
@@ -11,7 +11,7 @@ public abstract class Usuario {
     private String telefono;
     private String Domicilio;
     private String fechaDeNacimiento;
-    private List<Cuenta> cuentasDeUsuario;
+    private String tipoUsuario;
     private String usuario;
     private String password;
     private String email;
@@ -23,13 +23,20 @@ public abstract class Usuario {
         this.telefono = telefono;
         Domicilio = domicilio;
         this.fechaDeNacimiento = fechaDeNacimiento;
-        cuentasDeUsuario = new ArrayList<>();
         this.usuario = usuario;
         this.password = password;
         this.email = email;
     }
 
     public Usuario() {
+    }
+
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 
     public long getId() {
@@ -76,16 +83,6 @@ public abstract class Usuario {
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
 
-    public Cuenta getCuentasDeUsuario(int pos) {
-
-        return cuentasDeUsuario.get(pos);
-
-    }
-
-    public void setCuentasDeUsuario(Cuenta cuentitaNew) {
-        cuentasDeUsuario.add(cuentitaNew);
-    }
-
     public String getUsuario() {
         return usuario;
     }
@@ -108,12 +105,6 @@ public abstract class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public double consultarSaldo(Cuenta cuentaActual){
-
-        return cuentaActual.getSaldo();
-
     }
 
     public void setId(long id) {

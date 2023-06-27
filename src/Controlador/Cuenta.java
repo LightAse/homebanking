@@ -1,29 +1,49 @@
 package Controlador;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class Cuenta{
 
-    private String cbu;
+    private long cbu;
     private String alias;
-    private List<String> historial;
-    private double saldo;
-    private List<Tarjeta> tarjetaUsuario;
 
-    public Cuenta(String cbu, String alias, double saldo) {
+    private double saldo;
+
+    private long userOwner;
+    private String moneda;
+
+    public Cuenta(long  cbu, String alias, double saldo, long user, String moneda) {
         this.cbu = cbu;
         this.alias = alias;
-        historial = new ArrayList<>();
         this.saldo = saldo;
-        tarjetaUsuario = new ArrayList<>();
+        this.userOwner = user;
+        this.moneda = moneda;
     }
 
-    public String getCbu() {
+
+
+    public Cuenta() {
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+    public long getUserOwner() {
+        return userOwner;
+    }
+
+    public void setUserOwner(long userOwner) {
+        this.userOwner = userOwner;
+    }
+
+    public long getCbu() {
         return cbu;
     }
 
-    public void setCbu(String cbu) {
+    public void setCbu(long cbu) {
         this.cbu = cbu;
     }
 
@@ -35,38 +55,14 @@ public abstract class Cuenta{
         this.alias = alias;
     }
 
-    public String getHistorial(int pos) {
-        return (String) historial.get(pos);
-    }
-
-    public void setHistorial(String historialNew) {
-        historial.add(historialNew);
-    }
-
     public double getSaldo() {
-        double saldito = 0;
-        for (int i = 0; i < tarjetaUsuario.size(); i++) {
-            if(tipoTarjeta(tarjetaUsuario.get(i))){
-                TarjetaDeCredito tarjetita = (TarjetaDeCredito) tarjetaUsuario.get(i);
-                saldito += tarjetita.getSaldoActual();
-
-            }
-        }
-
-        return saldo - saldito;
+        return saldo;
     }
 
-    public Tarjeta getTarjetaUsuario(int pos) {
-        return tarjetaUsuario.get(pos);
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 
-    public void setTarjetaUsuario(Tarjeta tarjetaUsuarioNew) {
-        tarjetaUsuario.add(tarjetaUsuarioNew);
-    }
-
-    public boolean tipoTarjeta(Tarjeta tar){
-        return tar instanceof TarjetaDeCredito;
-    }
 
 
 

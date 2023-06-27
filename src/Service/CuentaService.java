@@ -1,18 +1,23 @@
 package Service;
 
-import Controlador.Usuario;
+import Controlador.Cuenta;
+import Controlador.CuentaCajaDeAhorro;
+import Model.DAOCuentaCajaDeAhorro;
 import Model.DAOException;
-import Model.DAOUsuario;
 
-public class UsuarioService {
-    private DAOUsuario daoUsuario;
+import java.util.ArrayList;
+import java.util.Currency;
 
-    public UsuarioService() {
-        daoUsuario=new DAOUsuario();
+public class CuentaService {
+
+    private DAOCuentaCajaDeAhorro daoCuentaCajaDeAhorro;
+
+    public CuentaService() {
+        daoCuentaCajaDeAhorro =new DAOCuentaCajaDeAhorro();
     }
-    public void guardarCliente(Usuario user) throws ServiceException {
+    public void guardarCliente(CuentaCajaDeAhorro user) throws ServiceException {
         try {
-            daoUsuario.guardar(user);
+            daoCuentaCajaDeAhorro.guardar(user);
         } catch (DAOException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -20,43 +25,43 @@ public class UsuarioService {
     public void eliminarCliente(long id) throws ServiceException
     {
         try{
-            daoUsuario.eliminar(id);
+            daoCuentaCajaDeAhorro.eliminar(id);
         }
         catch (DAOException e)
         {
             throw  new ServiceException(e.getMessage());
         }
     }
-    public Usuario buscar(long id)throws  ServiceException
+    public Cuenta buscar(long id)throws  ServiceException
     {
-        Usuario user=null;
+        Cuenta cuenta=null;
         try {
-            user=daoUsuario.buscar(id);
+            cuenta= daoCuentaCajaDeAhorro.buscar(id);
         }
         catch (DAOException e)
         {
             throw new ServiceException(e.getMessage());
         }
-        return user;
+        return cuenta;
     }
 
-    public Usuario buscar(String username, String password)throws  ServiceException
+    public ArrayList<CuentaCajaDeAhorro> buscarCajas(long id)throws  ServiceException
     {
-        Usuario user=null;
+        ArrayList<CuentaCajaDeAhorro> cuenta;
         try {
-            user=daoUsuario.buscar(username,password);
+            cuenta= daoCuentaCajaDeAhorro.buscarCajas(id);
         }
         catch (DAOException e)
         {
             throw new ServiceException(e.getMessage());
         }
-        return user;
+        return cuenta;
     }
 
     public void generarcolumna() throws ServiceException{
 
         try {
-            daoUsuario.generarcolumna();
+            daoCuentaCajaDeAhorro.generarcolumna();
         } catch (DAOException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -66,11 +71,13 @@ public class UsuarioService {
     public boolean existecolumna() throws ServiceException{
 
         try {
-            return daoUsuario.existecolumna();
+            return daoCuentaCajaDeAhorro.existecolumna();
         } catch (DAOException e) {
             throw new ServiceException(e.getMessage());
         }
 
     }
 
+
 }
+
