@@ -40,11 +40,11 @@ public class UsuarioService {
         return user;
     }
 
-    public Usuario buscar(String username, String password)throws  ServiceException
+    public Usuario buscar(String username, String password, String dni)throws  ServiceException
     {
         Usuario user=null;
         try {
-            user=daoUsuario.buscar(username,password);
+            user=daoUsuario.buscar(username,password,dni);
         }
         catch (DAOException e)
         {

@@ -129,7 +129,7 @@ public class DAOUsuario implements DAO<Usuario> {
         return datos;
     }
 
-    public Usuario buscar(String usuario, String password) throws DAOException {
+    public Usuario buscar(String usuario, String password, String dni) throws DAOException {
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -137,9 +137,10 @@ public class DAOUsuario implements DAO<Usuario> {
         try {
             Class.forName(DB_JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-            preparedStatement = connection.prepareStatement("SELECT * FROM Usuario  WHERE usuario=? and password=?");
+            preparedStatement = connection.prepareStatement("SELECT * FROM Usuario  WHERE usuario=? and password=? and dni=?");
             preparedStatement.setString(1, usuario);
             preparedStatement.setString(2, password);
+            preparedStatement.setString(3,dni);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = new Usuario();
