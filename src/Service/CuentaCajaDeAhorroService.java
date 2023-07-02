@@ -1,18 +1,17 @@
 package Service;
 
-import Controlador.Cuenta;
+import Controlador.CuentaCorriente;
 import Controlador.CuentaCajaDeAhorro;
 import Model.DAOCuentaCajaDeAhorro;
 import Model.DAOException;
 
 import java.util.ArrayList;
-import java.util.Currency;
 
-public class CuentaService {
+public class CuentaCajaDeAhorroService {
 
     private DAOCuentaCajaDeAhorro daoCuentaCajaDeAhorro;
 
-    public CuentaService() {
+    public CuentaCajaDeAhorroService() {
         daoCuentaCajaDeAhorro =new DAOCuentaCajaDeAhorro();
     }
     public void guardarCliente(CuentaCajaDeAhorro user) throws ServiceException {
@@ -32,17 +31,17 @@ public class CuentaService {
             throw  new ServiceException(e.getMessage());
         }
     }
-    public Cuenta buscar(long id)throws  ServiceException
+    public CuentaCorriente buscar(long id)throws  ServiceException
     {
-        Cuenta cuenta=null;
+        CuentaCorriente cuentaCorriente =null;
         try {
-            cuenta= daoCuentaCajaDeAhorro.buscar(id);
+            cuentaCorriente = daoCuentaCajaDeAhorro.buscar(id);
         }
         catch (DAOException e)
         {
             throw new ServiceException(e.getMessage());
         }
-        return cuenta;
+        return cuentaCorriente;
     }
 
     public ArrayList<CuentaCajaDeAhorro> buscarCajas(long id)throws  ServiceException

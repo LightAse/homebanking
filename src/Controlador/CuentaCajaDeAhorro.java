@@ -1,10 +1,10 @@
 package Controlador;
 
-public class CuentaCajaDeAhorro extends Cuenta{
+public class CuentaCajaDeAhorro extends CuentaCorriente {
 
     private double interes;
 
-    public CuentaCajaDeAhorro(long cbu, String alias, double saldo,long user,  double interes, String moneda) {
+    public CuentaCajaDeAhorro(long cbu, String alias, double saldo, long user, double interes, String moneda) {
         super(cbu, alias, saldo, user, moneda);
         this.interes = interes;
     }

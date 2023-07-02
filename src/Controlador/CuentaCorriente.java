@@ -1,6 +1,6 @@
 package Controlador;
 
-public abstract class Cuenta{
+public class CuentaCorriente {
 
     private long cbu;
     private String alias;
@@ -10,7 +10,7 @@ public abstract class Cuenta{
     private long userOwner;
     private String moneda;
 
-    public Cuenta(long  cbu, String alias, double saldo, long user, String moneda) {
+    public CuentaCorriente(long  cbu, String alias, double saldo, long user, String moneda) {
         this.cbu = cbu;
         this.alias = alias;
         this.saldo = saldo;
@@ -20,7 +20,7 @@ public abstract class Cuenta{
 
 
 
-    public Cuenta() {
+    public CuentaCorriente() {
     }
 
     public String getMoneda() {

@@ -3,7 +3,7 @@ package Gui;
 
 import Controlador.CuentaCajaDeAhorro;
 import Controlador.Usuario;
-import Service.CuentaService;
+import Service.CuentaCajaDeAhorroService;
 import Service.ServiceException;
 import Service.UsuarioService;
 
@@ -13,6 +13,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/* TODO
+*   Falta separar los metodos de calculos en su Service especifico
+*   Hay que crear la base de datos de Cuenta Corriente
+*   Hay que crear la base de datos de las Tarjetas
+*   Hay que crear la base de datos de las Transferencias(Historial)
+*   Hay que agregar un ADMIN
+*   Hacer la interfaz de la Cuenta Corriente
+*   Hacer la interfaz de las Tarjetas
+*   Hacer la interfaz de las Transferencias
+*   Hacer la interfaz de los Historiales
+*   Hacer la interfaz del ADMIN
+*   Hacer la interfaz de los errores */
+
 public class MainWindow extends JFrame implements ActionListener {
 
 
@@ -21,7 +34,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
     private UsuarioService user;
 
-    private CuentaService cuenta;
+    private CuentaCajaDeAhorroService cuenta;
     private JButton[] button;
 
     private JTextField[] array_textfield;
@@ -32,7 +45,7 @@ public class MainWindow extends JFrame implements ActionListener {
     public MainWindow()  throws ServiceException {
 
         estado = "login";
-        cuenta = new CuentaService();
+        cuenta = new CuentaCajaDeAhorroService();
         user = new UsuarioService();
 
         array_blockes = new Block[8];
@@ -133,10 +146,28 @@ public class MainWindow extends JFrame implements ActionListener {
 
     public void generate_right_top() throws ServiceException {
 
+        array_blockes[0].setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        JLabel temp = new JLabel("Hola, "+ getUserID().getNombre() + "!");
+        temp.setFont(new Font("Roboto",Font.PLAIN,25));
+        c.gridx = 1;
+        c.gridy = 0;
+        array_blockes[0].add(temp,c);
+        temp = new JLabel(saldoInString());
+        temp.setFont( new Font( "Roboto",Font.PLAIN,25));
+        c.gridx = 1;
+        c.gridy = 1;
+        array_blockes[0].add(temp,c);
+        temp = new JLabel("Saldo");
+        temp.setFont( new Font( "Roboto",Font.PLAIN,25));
+        c.gridx = 1;
+        c.gridy = 2;
+        array_blockes[0].add(temp,c);
     }
 
     public void generate_right_bottom() throws ServiceException {
 
+        array_blockes[5].add(button[0]);
     }
 
     public void CrearPartes() throws ServiceException {
@@ -158,12 +189,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
             }
 
-
-
         }
-
-
-
 
     }
 
@@ -209,12 +235,23 @@ public class MainWindow extends JFrame implements ActionListener {
             try {
                 setUserID(user.buscar(array_textfield[1].getText(),array_textfield[2].getText(),array_textfield[0].getText()));
                 limpiarPartes();
-                System.out.println("Funciono");
+                CrearPartes();
+                System.out.println("Logeado");
             } catch (ServiceException ex) {
-                System.out.println("Fallo");
+                System.out.println("Fallo el logeo");
                 throw new RuntimeException(ex);
             }
+        } else if (e.getSource() == button[0]) {
 
+            try {
+                limpiarPartes();
+                setUserID(null);
+                generate_login_interface();
+                System.out.println("Deslogeado");
+            } catch (ServiceException ex) {
+                System.out.println("Fallo el deslogeo");
+                throw new RuntimeException(ex);
+            }
 
         }
 
