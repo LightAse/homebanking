@@ -14,14 +14,14 @@ public class CuentaCajaDeAhorroService {
     public CuentaCajaDeAhorroService() {
         daoCuentaCajaDeAhorro =new DAOCuentaCajaDeAhorro();
     }
-    public void guardarCliente(CuentaCajaDeAhorro user) throws ServiceException {
+    public void guardarCaja(CuentaCajaDeAhorro user) throws ServiceException {
         try {
             daoCuentaCajaDeAhorro.guardar(user);
         } catch (DAOException e) {
             throw new ServiceException(e.getMessage());
         }
     }
-    public void eliminarCliente(long id) throws ServiceException
+    public void eliminarCaja(long id) throws ServiceException
     {
         try{
             daoCuentaCajaDeAhorro.eliminar(id);

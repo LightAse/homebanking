@@ -28,6 +28,19 @@ public  class Usuario {
         this.email = email;
     }
 
+    public Usuario(long id, String dni, String nombre, String telefono, String domicilio, String fechaDeNacimiento, String tipoUsuario, String usuario, String password, String email) {
+        this.id = id;
+        this.dni = dni;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        Domicilio = domicilio;
+        this.fechaDeNacimiento = fechaDeNacimiento;
+        this.tipoUsuario = tipoUsuario;
+        this.usuario = usuario;
+        this.password = password;
+        this.email = email;
+    }
+
     public Usuario() {
     }
 

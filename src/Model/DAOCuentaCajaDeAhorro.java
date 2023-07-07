@@ -30,7 +30,6 @@ public class DAOCuentaCajaDeAhorro implements DAO<CuentaCajaDeAhorro>{
             System.out.println("Se agregaron "+ res);
         }catch(ClassNotFoundException | SQLException e){
             throw  new DAOException(e.getMessage());
-
         }
     }
 
