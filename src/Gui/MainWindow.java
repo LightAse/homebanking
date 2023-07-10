@@ -4,6 +4,7 @@ package Gui;
 import Controlador.CuentaCajaDeAhorro;
 import Controlador.Usuario;
 import Service.CuentaCajaDeAhorroService;
+import Service.HomebankingService;
 import Service.ServiceException;
 import Service.UsuarioService;
 
@@ -12,13 +13,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 /* TODO
 *   Falta separar los metodos de calculos en su Service especifico
 *   Hay que crear la base de datos de Cuenta Corriente
 *   Hay que crear la base de datos de las Tarjetas
 *   Hay que crear la base de datos de las Transferencias(Historial)
-*   Hay que agregar un ADMIN
 *   Hacer la interfaz de la Cuenta Corriente
 *   Hacer la interfaz de las Tarjetas
 *   Hacer la interfaz de las Transferencias
@@ -30,26 +32,26 @@ public class MainWindow extends JFrame implements ActionListener {
 
 
     private Block[] array_blockes;
-    private Usuario UserID;
 
-    private UsuarioService user;
-
-    private CuentaCajaDeAhorroService cuenta;
     private JButton[] button;
 
     private JTextField[] array_textfield;
 
     private String estado;
 
+    private JComboBox[] array_comboBox;
+
+    private HomebankingService controlador;
+
 
     public MainWindow()  throws ServiceException {
 
         estado = "login";
-        cuenta = new CuentaCajaDeAhorroService();
-        user = new UsuarioService();
+        controlador = new HomebankingService();
 
         array_blockes = new Block[8];
         array_textfield = new JTextField[12];
+        array_comboBox = new JComboBox[2];
 
         Block block = new Block(Color.red,0,0,225,300);
         array_blockes[0] = block;
@@ -61,7 +63,7 @@ public class MainWindow extends JFrame implements ActionListener {
         Block block2 = new Block(Color.blue,525,0,225,250);
         array_blockes[2] = block2;
 
-        Block block3 = new Block(Color.magenta,525,250,500,500);
+        Block block3 = new Block(Color.magenta,525,250,225,500);
         array_blockes[3] = block3;
 
         Block block4 = new Block(Color.yellow,array_blockes[0].getX(),array_blockes[0].getY()+300,225,250);
@@ -92,7 +94,6 @@ public class MainWindow extends JFrame implements ActionListener {
 
 
         generate_login_interface();
-
 
         this.setVisible(true);//this visible
 
@@ -148,12 +149,12 @@ public class MainWindow extends JFrame implements ActionListener {
 
         array_blockes[0].setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        JLabel temp = new JLabel("Hola, "+ getUserID().getNombre() + "!");
+        JLabel temp = new JLabel("Hola, "+ controlador.buscarNombreUsuario(controlador.getUserID()) + "!");
         temp.setFont(new Font("Roboto",Font.PLAIN,25));
         c.gridx = 1;
         c.gridy = 0;
         array_blockes[0].add(temp,c);
-        temp = new JLabel(saldoInString());
+        temp = new JLabel(controlador.saldoInString());
         temp.setFont( new Font( "Roboto",Font.PLAIN,25));
         c.gridx = 1;
         c.gridy = 1;
@@ -165,17 +166,137 @@ public class MainWindow extends JFrame implements ActionListener {
         array_blockes[0].add(temp,c);
     }
 
-    public void generate_right_bottom() throws ServiceException {
+    public void generate_combobox_tarjeta(Long cbu) throws  ServiceException{
+
+        array_comboBox[1] = new JComboBox(controlador.getTarjetasParaComboBox(cbu).toArray());
+        String temp = array_comboBox[1].getSelectedItem().toString();
+        if(Objects.equals(temp, "NINGUNA")){
+
+            array_comboBox[1].setVisible(false);
+        }else{
+
+            array_comboBox[1].setVisible(true);
+
+        }
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 1;
+        array_blockes[4].add(array_comboBox[1],c);
+
+
+    }
+
+
+    public void generate_right_middle() throws ServiceException {
+
+        array_blockes[4].setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        array_comboBox[0] = new JComboBox(controlador.getCajasParaComboBox().toArray());
+        array_comboBox[0].addActionListener(this);
+        c.gridx = 0;
+        c.gridy = 0;
+        array_blockes[4].add(array_comboBox[0],c);
+        String temp = array_comboBox[0].getSelectedItem().toString();
+        temp = temp.substring(temp.indexOf(":")+2);
+        generate_combobox_tarjeta(Long.valueOf(temp));
+    }
+
+    public void generate_right_bottom(){
 
         array_blockes[5].add(button[0]);
+    }
+
+    public void generate_middle() throws ServiceException {
+
+        array_blockes[1].setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.VERTICAL;
+        c.weightx = 0.5;
+        c.gridx = 1;
+        c.gridy = 0;
+        array_blockes[1].add(new JLabel(array_comboBox[0].getSelectedItem().toString(),SwingConstants.CENTER),c);
+        String temp = array_comboBox[0].getSelectedItem().toString();
+        temp = temp.substring(temp.indexOf(":")+2);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
+        array_blockes[1].add(new JLabel("CBU: "+ temp),c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 2;
+        array_blockes[1].add(new JLabel("ALIAS: " + controlador.getAliasCaja(Long.parseLong(temp))),c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        array_blockes[1].add(new JLabel("Saldo: " + controlador.getSaldoCaja(Long.parseLong(temp))),c);
+        if(array_comboBox[1].getItemCount() != 0){
+
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 4;
+            array_blockes[1].add(new JLabel("----------------------------------------"),c);
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 5;
+            array_blockes[1].add(new JLabel(array_comboBox[1].getSelectedItem().toString(),SwingConstants.CENTER),c);
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = 6;
+            //array_blockes[1].add(new JLabel("Numero: "+),c);
+        }
+
+
+    }
+
+    public void generate_left_bottom_Transfer(){
+        array_blockes[3].setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.VERTICAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+        array_blockes[3].add(new JLabel("Transferencias con "),c);
+        c.gridx = 0;
+        c.gridy = 1;
+        array_blockes[3].add(new JLabel(array_comboBox[0].getSelectedItem().toString()),c);
+        c.gridx = 0;
+        c.gridy = 2;
+        array_blockes[3].add(new JLabel("id/cbu/alias: "),c);
+        c.gridx = 0;
+        c.gridy = 3;
+        array_blockes[3].add(new JLabel("Cantidad: "),c);
+        c.gridx = 0;
+        c.gridy = 4;
+        array_blockes[3].add(new JLabel("Motivo: "),c);
+
+        for (int i = 0; i < 3; i++) {
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.ipadx = 20;
+            c.gridx = 1;
+            c.gridy = i+2;
+            c.weightx = 1;
+            c.gridwidth = 2;
+            c.gridheight = 1;
+            array_textfield[i+3] = new JTextField();
+            array_blockes[3].add(array_textfield[i+3],c);
+        }
+
+
+
+
     }
 
     public void CrearPartes() throws ServiceException {
 
         generate_right_top();
+        generate_right_middle();
         generate_right_bottom();
+        generate_middle();
+        generate_left_bottom_Transfer();
 
     }
+
+
 
     public void limpiarPartes(){
 
@@ -193,24 +314,24 @@ public class MainWindow extends JFrame implements ActionListener {
 
     }
 
+    public void limpiarUnaParte(int i){
 
-    public String saldoInString() throws ServiceException {
-        double saldo = 0;
-        ArrayList<CuentaCajaDeAhorro> Cuenta = cuenta.buscarCajas(UserID.getId());
-        for (int i = 0; i < Cuenta.size(); i++) {
+        if(array_blockes[i] != null){
 
-            CuentaCajaDeAhorro aux = Cuenta.get(i);
-            saldo += aux.getSaldo();
+            array_blockes[i].removeAll();
+            array_blockes[i].revalidate();
+            array_blockes[i].repaint();
 
         }
-        return String.valueOf(saldo);
 
     }
 
-    public ArrayList<CuentaCajaDeAhorro> getCajasdeAhorro() throws ServiceException{
+    public String getEstado() {
+        return estado;
+    }
 
-        return cuenta.buscarCajas(UserID.getId());
-
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public void addLabel(String text, int pos_array ){
@@ -219,13 +340,6 @@ public class MainWindow extends JFrame implements ActionListener {
 
     }
 
-    public Usuario getUserID() {
-        return UserID;
-    }
-
-    public void setUserID(Usuario userID) {
-        UserID = userID;
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -233,23 +347,43 @@ public class MainWindow extends JFrame implements ActionListener {
         if(e.getSource()==button[1]){
 
             try {
-                setUserID(user.buscar(array_textfield[1].getText(),array_textfield[2].getText(),array_textfield[0].getText()));
+                System.out.println(array_textfield[1].getText() + array_textfield[2].getText() +array_textfield[0].getText());
+                controlador.setUserID(array_textfield[1].getText(),array_textfield[2].getText(),array_textfield[0].getText());
                 limpiarPartes();
+                setEstado(controlador.esAdmin());
                 CrearPartes();
                 System.out.println("Logeado");
             } catch (ServiceException ex) {
                 System.out.println("Fallo el logeo");
                 throw new RuntimeException(ex);
             }
-        } else if (e.getSource() == button[0]) {
+        }
+        if (e.getSource() == button[0]) {
 
             try {
                 limpiarPartes();
-                setUserID(null);
                 generate_login_interface();
                 System.out.println("Deslogeado");
             } catch (ServiceException ex) {
                 System.out.println("Fallo el deslogeo");
+                throw new RuntimeException(ex);
+            }
+
+        }
+        if (e.getSource() == array_comboBox[0]) {
+
+            limpiarUnaParte(1);
+            limpiarUnaParte(3);
+            try {
+                String temp = array_comboBox[0].getSelectedItem().toString();
+                temp = temp.substring(temp.indexOf(":")+2);
+                array_blockes[4].remove(1);
+                array_blockes[4].revalidate();
+                array_blockes[4].repaint();
+                generate_combobox_tarjeta(Long.valueOf(temp));
+                generate_middle();
+                generate_left_bottom_Transfer();
+            } catch (ServiceException ex) {
                 throw new RuntimeException(ex);
             }
 

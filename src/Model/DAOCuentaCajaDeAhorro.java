@@ -89,7 +89,8 @@ public class DAOCuentaCajaDeAhorro implements DAO<CuentaCajaDeAhorro>{
                 CuentaCajaDeAhorro = new CuentaCajaDeAhorro();
                 CuentaCajaDeAhorro.setCbu(resultSet.getLong("CBU"));
                 CuentaCajaDeAhorro.setAlias(resultSet.getString("ALIAS"));
-                CuentaCajaDeAhorro.setUserOwner(resultSet.getLong("usuario"));
+                CuentaCajaDeAhorro.setUserOwner(resultSet.getLong("USERID"));
+                CuentaCajaDeAhorro.setSaldo(resultSet.getDouble("saldo"));
                 CuentaCajaDeAhorro.setCbu(id);
             }
         }

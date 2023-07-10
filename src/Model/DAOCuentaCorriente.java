@@ -90,7 +90,8 @@ public class DAOCuentaCorriente implements DAO<CuentaCorriente>{
                 CuentaCorriente = new CuentaCajaDeAhorro();
                 CuentaCorriente.setCbu(resultSet.getLong("CBU"));
                 CuentaCorriente.setAlias(resultSet.getString("ALIAS"));
-                CuentaCorriente.setUserOwner(resultSet.getLong("usuario"));
+                CuentaCorriente.setUserOwner(resultSet.getLong("userid"));
+                CuentaCorriente.setSaldo(resultSet.getDouble("saldo"));
             }
         }
         catch (ClassNotFoundException | SQLException e)
