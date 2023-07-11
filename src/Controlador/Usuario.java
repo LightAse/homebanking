@@ -28,7 +28,7 @@ public  class Usuario {
         this.email = email;
     }
 
-    public Usuario(long id, String dni, String nombre, String telefono, String domicilio, String fechaDeNacimiento, String tipoUsuario, String usuario, String password, String email) {
+    public Usuario(long id, String dni, String nombre, String telefono, String domicilio, String fechaDeNacimiento, String usuario, String password, String email, String tipoUsuario) {
         this.id = id;
         this.dni = dni;
         this.nombre = nombre;

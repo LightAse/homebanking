@@ -15,7 +15,7 @@ __Tarjetas__:
 *   ~~realizar toda la base de datos~~
 
 __Transferencias__:
-*   Continuar con la base de datos de transferencias!
+*   ~~Continuar con la base de datos de transferencias~~
 
 
 
@@ -28,16 +28,17 @@ Trabajo FrontEnd!
 
 __Admin__:
 *   Desarrollar todo el frontEnd del Admin
-*   Hacer un sistema de creacion de usuarios
-*   hacer un sistema de creacion de cuentas
-*   hacer un boton que cambie del lado admin al lado usuario
+*   ~~Hacer un sistema de creacion de usuarios~~
+*   ~~hacer un sistema de creacion de cuentas~~
+*   ~~Hacer un sistema de creacion de tarjetas~~
+*   ~~hacer un boton que cambie del lado admin al lado usuario~~
 
 
 __Usuario__:
 *   ~~Desarrollar el sistema de ver las cuentas del usuario~~
 *   ~~Desarrollar el sistema de ver las tarjetas del usuario~~
 *   Falta poder ver el saldo,numero y disponible de las tarjetas!
-*   Desarrollar el sistema de transferencia
+*   ~~Desarrollar el sistema de transferencia~~
 *   Desarrollar el sistema de historia de transferencias
 
 

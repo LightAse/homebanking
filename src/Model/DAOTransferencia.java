@@ -24,8 +24,8 @@ public class DAOTransferencia implements DAO<Transferencia> {
             connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
             preparedStatement = connection.prepareStatement("INSERT INTO TRANSFERENCIA values (?,?,?,?,?,?)");
             preparedStatement.setLong(1,elemento.getId());
-            preparedStatement.setString(2, elemento.getDestinatario());
-            preparedStatement.setString(3, elemento.getRemitente());
+            preparedStatement.setLong(2, elemento.getDestinatario());
+            preparedStatement.setLong(3, elemento.getRemitente());
             preparedStatement.setDouble(4, elemento.getCantidad());
             preparedStatement.setString(5, elemento.getMotivo());
             preparedStatement.setString(6, elemento.getFecha());

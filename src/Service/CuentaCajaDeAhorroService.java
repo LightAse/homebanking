@@ -31,17 +31,57 @@ public class CuentaCajaDeAhorroService {
             throw  new ServiceException(e.getMessage());
         }
     }
-    public CuentaCorriente buscar(long id)throws  ServiceException
+
+    public void modificarSaldo(CuentaCajaDeAhorro caja) throws ServiceException{
+
+        try{
+
+            daoCuentaCajaDeAhorro.modificarSaldo(caja);
+
+        } catch (DAOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+    public CuentaCajaDeAhorro buscar(long id)throws  ServiceException
     {
-        CuentaCorriente cuentaCorriente =null;
+        CuentaCajaDeAhorro cuentaAhorro =null;
         try {
-            cuentaCorriente = daoCuentaCajaDeAhorro.buscar(id);
+            cuentaAhorro = daoCuentaCajaDeAhorro.buscar(id);
         }
         catch (DAOException e)
         {
             throw new ServiceException(e.getMessage());
         }
-        return cuentaCorriente;
+        return cuentaAhorro;
+    }
+
+    public ArrayList<CuentaCajaDeAhorro> buscarTodos()throws  ServiceException
+    {
+
+        try {
+            return daoCuentaCajaDeAhorro.buscarTodos();
+        }
+        catch (DAOException e)
+        {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    public CuentaCajaDeAhorro buscarXAlias(String id)throws  ServiceException
+    {
+        CuentaCajaDeAhorro cuentaAhorro =null;
+        try {
+            cuentaAhorro = daoCuentaCajaDeAhorro.buscarXAlias(id);
+        }
+        catch (DAOException e)
+        {
+            throw new ServiceException(e.getMessage());
+        }
+        return cuentaAhorro;
     }
 
     public ArrayList<CuentaCajaDeAhorro> buscarCajas(long id)throws  ServiceException

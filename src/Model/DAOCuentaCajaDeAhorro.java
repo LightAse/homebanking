@@ -1,7 +1,7 @@
 package Model;
 
 import Controlador.CuentaCajaDeAhorro;
-
+import Controlador.CuentaCorriente;
 
 
 import java.sql.*;
@@ -55,6 +55,25 @@ public class DAOCuentaCajaDeAhorro implements DAO<CuentaCajaDeAhorro>{
         }
 
     }
+    public void modificarSaldo(CuentaCajaDeAhorro elemento) throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
+            Class.forName(DB_JDBC_DRIVER);
+            connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
+            preparedStatement = connection.prepareStatement("UPDATE CUENTACAJADEAHORRO SET saldo=? where cbu=?");preparedStatement.setString(1, elemento.getAlias());
+            preparedStatement.setDouble(1, elemento.getSaldo());
+            preparedStatement.setLong(2,elemento.getCbu());
+            int res= preparedStatement.executeUpdate();
+            System.out.println("Se modificaron "+ res);
+        }catch(ClassNotFoundException | SQLException e){
+            throw new DAOException(e.getMessage());
+
+        }
+
+    }
+
 
     @Override
     public void eliminar(long cbu) throws DAOException {
@@ -101,6 +120,32 @@ public class DAOCuentaCajaDeAhorro implements DAO<CuentaCajaDeAhorro>{
         return CuentaCajaDeAhorro;
     }
 
+    public CuentaCajaDeAhorro buscarXAlias(String id) throws DAOException {
+        Connection connection=null;
+        PreparedStatement preparedStatement=null;
+        CuentaCajaDeAhorro CuentaCajaDeAhorro=null;
+        try {
+            Class.forName(DB_JDBC_DRIVER);
+            connection= DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
+            preparedStatement=connection.prepareStatement("SELECT * FROM CUENTACAJADEAHORRO  WHERE ALIAS=?");
+            preparedStatement.setString(1,id);
+            ResultSet resultSet =preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                CuentaCajaDeAhorro = new CuentaCajaDeAhorro();
+                CuentaCajaDeAhorro.setCbu(resultSet.getLong("CBU"));
+                CuentaCajaDeAhorro.setAlias(resultSet.getString("ALIAS"));
+                CuentaCajaDeAhorro.setUserOwner(resultSet.getLong("USERID"));
+                CuentaCajaDeAhorro.setSaldo(resultSet.getDouble("saldo"));
+            }
+        }
+        catch (ClassNotFoundException | SQLException e)
+        {
+            throw  new DAOException(e.getMessage());
+        }
+        return CuentaCajaDeAhorro;
+    }
+
+
     @Override
     public ArrayList buscarTodos() throws DAOException {
         Connection connection=null;
@@ -113,10 +158,9 @@ public class DAOCuentaCajaDeAhorro implements DAO<CuentaCajaDeAhorro>{
             preparedStatement=connection.prepareStatement("SELECT * FROM CUENTACAJADEAHORRO");
             ResultSet resultSet =preparedStatement.executeQuery();
             while (resultSet.next()) {
-
                 user = new CuentaCajaDeAhorro();
                 user.setCbu(resultSet.getLong("cbu"));
-                user.setUserOwner(resultSet.getLong("usuario"));
+                user.setUserOwner(resultSet.getLong("userid"));
                 user.setAlias(resultSet.getString("alias"));
                 user.setSaldo(resultSet.getDouble("Saldo"));
                 user.setMoneda(resultSet.getString("moneda"));

@@ -94,6 +94,7 @@ public class DAOUsuario implements DAO<Usuario> {
                 user.setNombre(resultSet.getString("NOMBRE"));
                 user.setDomicilio(resultSet.getString("DOMICILIO"));
                 user.setTelefono(resultSet.getString("TELEFONO"));
+                user.setTipoUsuario(resultSet.getString("TIPOUSUARIO"));
                 user.setId(id);
             }
         } catch (ClassNotFoundException | SQLException e) {

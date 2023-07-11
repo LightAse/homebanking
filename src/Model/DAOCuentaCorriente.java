@@ -55,6 +55,25 @@ public class DAOCuentaCorriente implements DAO<CuentaCorriente>{
 
     }
 
+    public void modificarSaldo(CuentaCorriente elemento) throws DAOException {
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
+            Class.forName(DB_JDBC_DRIVER);
+            connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
+            preparedStatement = connection.prepareStatement("UPDATE CUENTACORRIENTE SET saldo=? where cbu=?");preparedStatement.setString(1, elemento.getAlias());
+            preparedStatement.setDouble(1, elemento.getSaldo());
+            preparedStatement.setLong(2,elemento.getCbu());
+            int res= preparedStatement.executeUpdate();
+            System.out.println("Se modificaron "+ res);
+        }catch(ClassNotFoundException | SQLException e){
+            throw new DAOException(e.getMessage());
+
+        }
+
+    }
+
 
 
     @Override
@@ -85,6 +104,31 @@ public class DAOCuentaCorriente implements DAO<CuentaCorriente>{
             connection= DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
             preparedStatement=connection.prepareStatement("SELECT * FROM CUENTACORRIENTE WHERE cbu=?");
             preparedStatement.setLong(1,id);
+            ResultSet resultSet =preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                CuentaCorriente = new CuentaCajaDeAhorro();
+                CuentaCorriente.setCbu(resultSet.getLong("CBU"));
+                CuentaCorriente.setAlias(resultSet.getString("ALIAS"));
+                CuentaCorriente.setUserOwner(resultSet.getLong("userid"));
+                CuentaCorriente.setSaldo(resultSet.getDouble("saldo"));
+            }
+        }
+        catch (ClassNotFoundException | SQLException e)
+        {
+            throw  new DAOException(e.getMessage());
+        }
+        return CuentaCorriente;
+    }
+
+    public CuentaCorriente buscarXAlias(String id) throws DAOException {
+        Connection connection=null;
+        PreparedStatement preparedStatement=null;
+        CuentaCorriente CuentaCorriente=null;
+        try {
+            Class.forName(DB_JDBC_DRIVER);
+            connection= DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
+            preparedStatement=connection.prepareStatement("SELECT * FROM CUENTACORRIENTE WHERE alias=?");
+            preparedStatement.setString(1,id);
             ResultSet resultSet =preparedStatement.executeQuery();
             if (resultSet.next()) {
                 CuentaCorriente = new CuentaCajaDeAhorro();

@@ -36,14 +36,11 @@ public class TarjetaDebitoService {
 
     public TarjetaDebito buscar(long id) throws ServiceException{
 
-        TarjetaDebito tarjetita = null;
-
         try {
-            tarjetita = daoTarjetaDebito.buscar(id);
+           return daoTarjetaDebito.buscar(id);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
-        return tarjetita;
     }
 
     public ArrayList<TarjetaDebito> buscarTarjetas()throws  ServiceException

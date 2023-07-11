@@ -1,5 +1,6 @@
 package Service;
 
+import Controlador.CuentaCajaDeAhorro;
 import Controlador.CuentaCorriente;
 import Model.DAOCuentaCorriente;
 import Model.DAOException;
@@ -42,6 +43,44 @@ public class CuentaCorrienteService {
         }
         return cuentaCorriente;
     }
+
+    public ArrayList<CuentaCorriente> buscarTodos()throws  ServiceException
+    {
+        try {
+            return daoCuentaCorriente.buscarTodos();
+        }
+        catch (DAOException e)
+        {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    public CuentaCorriente buscarXAlias(String id)throws  ServiceException
+    {
+        CuentaCorriente cuentaCorriente =null;
+        try {
+            cuentaCorriente = daoCuentaCorriente.buscarXAlias(id);
+        }
+        catch (DAOException e)
+        {
+            throw new ServiceException(e.getMessage());
+        }
+        return cuentaCorriente;
+    }
+
+    public void modificarSaldo(CuentaCorriente caja) throws ServiceException{
+
+        try{
+
+            daoCuentaCorriente.modificarSaldo(caja);
+
+        } catch (DAOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
 
     public ArrayList<CuentaCorriente> buscarCajas(long id)throws  ServiceException
     {

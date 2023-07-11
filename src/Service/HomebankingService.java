@@ -1,10 +1,8 @@
 package Service;
 
-import Controlador.CuentaCajaDeAhorro;
-import Controlador.CuentaCorriente;
-import Controlador.TarjetaDebito;
-import Controlador.Usuario;
+import Controlador.*;
 
+import javax.lang.model.element.Element;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -14,6 +12,7 @@ public class HomebankingService {
     private CuentaCajaDeAhorroService cuentaAhorro;
     private CuentaCorrienteService cuentaCorriente;
     private TarjetaDebitoService tarjetaDebito;
+    private TransferenciaService transferencia;
 
     private long UserID;
 
@@ -23,6 +22,7 @@ public class HomebankingService {
         user = new UsuarioService();
         cuentaCorriente = new CuentaCorrienteService();
         tarjetaDebito = new TarjetaDebitoService();
+        transferencia = new TransferenciaService();
 
     }
 
@@ -46,8 +46,73 @@ public class HomebankingService {
 
     }
 
+    public void guardarUser(Usuario Us) throws ServiceException {
+
+        user.guardarCliente(Us);
+
+    }
+
+    public void guardarCuentaAhorro(CuentaCajaDeAhorro ahorro) throws ServiceException {
+
+        cuentaAhorro.guardarCaja(ahorro);
+
+    }
+
+    public void guardarCuentaCorriente(CuentaCorriente corriente) throws ServiceException {
+
+        cuentaCorriente.guardarCuenta(corriente);
+
+    }
+
+    public void guardarTarjeta(TarjetaDebito tarjeta) throws ServiceException{
+
+        tarjetaDebito.guardarTarjeta(tarjeta);
+
+    }
+
+
     public Long getUserID() {
         return UserID;
+    }
+
+    public boolean existeDNI(String dni){
+
+        ArrayList<Usuario> array_user = user.buscarTodos();
+
+        for (int i = 0; i < array_user.size(); i++) {
+
+            if(Objects.equals(array_user.get(i).getDni(), dni)){
+
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    public long getNewIdUsuario(){
+
+        ArrayList<Usuario> array_user = user.buscarTodos();
+
+        return array_user.size();
+
+    }
+
+    public long getNewCbu() throws ServiceException {
+
+        ArrayList<CuentaCajaDeAhorro> array_ahorro = cuentaAhorro.buscarTodos();
+        ArrayList<CuentaCorriente> array_corriente = cuentaCorriente.buscarTodos();
+
+        return array_ahorro.size() + array_corriente.size();
+
+    }
+
+    public long getNewIdTarjeta() throws ServiceException {
+
+        ArrayList<TarjetaDebito> array_tajeta = tarjetaDebito.buscarTarjetas();
+
+        return array_tajeta.size();
+
     }
 
     public void setUserID(String username, String password,String dni) throws ServiceException {
@@ -74,14 +139,10 @@ public class HomebankingService {
     public String esAdmin(){
 
         try{
-            if(Objects.equals(user.buscar(getUserID()).getTipoUsuario(), "Admin")){
-                return "admin";
-            }
+            return user.buscar(getUserID()).getTipoUsuario();
         }catch (ServiceException ex){
             throw new RuntimeException(ex);
         }
-
-        return "user";
 
     }
 
@@ -97,7 +158,7 @@ public class HomebankingService {
         ArrayList<CuentaCajaDeAhorro> temp = cuentaAhorro.buscarCajas(UserID);
         for (int i = 0; i < temp.size(); i++) {
 
-            aux.add("Caja de Ahorro: " + temp.get(i).getCbu());
+            aux.add("Caja de Ahorro:" + temp.get(i).getCbu());
 
         }
 
@@ -105,7 +166,7 @@ public class HomebankingService {
 
         for (int i = 0; i < temp2.size(); i++) {
 
-            aux.add("Caja Corriente: " + temp2.get(i).getCbu());
+            aux.add("Caja Corriente:" + temp2.get(i).getCbu());
 
         }
 
@@ -120,7 +181,7 @@ public class HomebankingService {
 
             for (int i = 0; i < temp.size(); i++) {
 
-                aux.add("Tarjeta: " + temp.get(i).getNumero() + "-" + temp.get(i).getFechaDeVencimiento());
+                aux.add("Tarjeta: " + temp.get(i).getNumero() + "-" + temp.get(i).getId());
 
             }
             return aux;
@@ -131,33 +192,174 @@ public class HomebankingService {
 
     }
 
+    public ArrayList<String> getUsuarioParaComboBox() throws ServiceException{
 
-    public String getAliasCaja(long cbu) throws ServiceException {
+        ArrayList<String> aux = new ArrayList<>();
+        ArrayList<Usuario> temp = user.buscarTodos();
+        for (int i = 0; i < temp.size(); i++) {
 
-        if(cuentaAhorro.buscar(cbu) != null){
+            aux.add(temp.get(i).getUsuario() + "-" + temp.get(i).getId());
+
+        }
+        return aux;
+
+    }
+
+    public ArrayList<String> getCuentaParaComboBox() throws ServiceException{
+
+        ArrayList<String> aux = new ArrayList<>();
+        ArrayList<CuentaCajaDeAhorro> temp = cuentaAhorro.buscarTodos();
+        for (int i = 0; i < temp.size(); i++) {
+
+            aux.add("Ahorro:" + temp.get(i).getCbu());
+
+        }
+
+        ArrayList<CuentaCorriente> temp2 = cuentaCorriente.buscarTodos();
+
+        for (int i = 0; i < temp2.size(); i++) {
+
+            aux.add("Corriente:" + temp2.get(i).getCbu());
+
+        }
+
+        return aux;
+
+    }
+
+
+    public String getAliasCajaAhorro(long cbu) throws ServiceException {
 
             return cuentaAhorro.buscar(cbu).getAlias();
-        }
+    }
+
+
+    public Double getSaldoCajaAhorro(long cbu) throws ServiceException{
+
+            return cuentaAhorro.buscar(cbu).getSaldo();
+
+    }
+
+    public Double getInteresCajaAhorro(long cbu) throws ServiceException{
+
+        return cuentaAhorro.buscar(cbu).getInteres();
+
+    }
+
+    public String getAliasCajaCorriente(long cbu) throws ServiceException {
+
         return cuentaCorriente.buscar(cbu).getAlias();
     }
 
 
-    public Double getSaldoCaja(long cbu) throws ServiceException{
+    public Double getSaldoCajaCorriente(long cbu) throws ServiceException{
 
-        if(cuentaAhorro.buscar(cbu) != null){
-
-            return cuentaAhorro.buscar(cbu).getSaldo();
-        }
         return cuentaCorriente.buscar(cbu).getSaldo();
 
     }
 
+    public String getNumerotarjeta(long cbu) throws ServiceException {
+
+            return tarjetaDebito.buscar(cbu).getNumero();
+    }
+
+
+    public Double getDisponibleTarjeta(long cbu) throws ServiceException{
+
+        return tarjetaDebito.buscar(cbu).getDisponible();
+
+    }
+
+    public Double getSaldoTarjeta(long cbu) throws ServiceException{
+
+        return tarjetaDebito.buscar(cbu).getSaldo();
+
+    }
 
     public ArrayList<CuentaCorriente> getCajasCorrientes() throws ServiceException{
 
         return cuentaCorriente.buscarCajas(UserID);
 
     }
+
+
+    public CuentaCajaDeAhorro getCuentaAhorro(String destino){
+
+        try{
+
+            return cuentaAhorro.buscar(Long.parseLong(destino));
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public CuentaCorriente getCuentaCorriente(String destino){
+
+        try{
+
+            return cuentaCorriente.buscar(Long.parseLong(destino));
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    public CuentaCajaDeAhorro getCuentaAhorroXAlias(String destino){
+
+        try{
+
+            return cuentaAhorro.buscarXAlias(destino);
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public CuentaCorriente getCuentaCorrienteXAlias(String destino){
+
+        try{
+
+            return cuentaCorriente.buscarXAlias(destino);
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    public void ejecutarTransferencia(CuentaCajaDeAhorro destinatario, CuentaCajaDeAhorro remitente, double cantidad, String motivo, String fecha, int tipoDestino, int tipoRemitente) throws ServiceException{
+
+        if(remitente.getSaldo() > cantidad){
+
+            transferencia.guardarTransferencia(new Transferencia(0,destinatario.getCbu(),remitente.getCbu(),cantidad,motivo,fecha));
+            remitente.setSaldo(remitente.getSaldo()-cantidad);
+            destinatario.setSaldo(destinatario.getSaldo()+cantidad);
+            if(tipoDestino == 0){
+
+                cuentaAhorro.modificarSaldo(destinatario);
+
+            }else{
+
+                cuentaCorriente.modificarSaldo(destinatario);
+
+            }
+            if(tipoRemitente == 0){
+
+                cuentaAhorro.modificarSaldo(remitente);
+
+            }else{
+
+                cuentaCorriente.modificarSaldo(remitente);
+
+            }
+
+        }
+
+        System.out.println("se ha logrado una transferencia!");
+
+    }
+
+
 
 
 }

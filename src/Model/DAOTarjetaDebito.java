@@ -84,12 +84,12 @@ public class DAOTarjetaDebito implements DAO<TarjetaDebito>{
         try {
             Class.forName(DB_JDBC_DRIVER);
             connection= DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
-            preparedStatement=connection.prepareStatement("SELECT * FROM TARJETADEBITO WHERE id=?");
+            preparedStatement=connection.prepareStatement("SELECT * FROM TARJETADEBITO WHERE ID=?");
             preparedStatement.setLong(1,id);
             ResultSet resultSet =preparedStatement.executeQuery();
             if (resultSet.next()) {
                 tarjetaDebito = new TarjetaDebito();
-                tarjetaDebito.setId(resultSet.getLong("id"));
+                tarjetaDebito.setId(resultSet.getLong("ID"));
                 tarjetaDebito.setNumero(resultSet.getString("numero"));
                 tarjetaDebito.setCodigoDeSeguridad(resultSet.getLong("codigodeseguridad"));
                 tarjetaDebito.setFechaDeVencimiento(resultSet.getString("fechadevencimiento"));
@@ -118,6 +118,7 @@ public class DAOTarjetaDebito implements DAO<TarjetaDebito>{
             ResultSet resultSet =preparedStatement.executeQuery();
             while (resultSet.next()) {
                 user = new TarjetaDebito();
+                user.setId(resultSet.getLong("ID"));
                 user.setCbuCuentaOwner(resultSet.getLong("cbucuentaowner"));
                 user.setNumero(resultSet.getString("numero"));
                 user.setCodigoDeSeguridad(resultSet.getInt("codigodeseguridad"));
@@ -147,6 +148,7 @@ public class DAOTarjetaDebito implements DAO<TarjetaDebito>{
             ResultSet resultSet =preparedStatement.executeQuery();
             while (resultSet.next()) {
                 user = new TarjetaDebito();
+                user.setId(resultSet.getLong("ID"));
                 user.setCbuCuentaOwner(resultSet.getLong("cbucuentaowner"));
                 user.setNumero(resultSet.getString("numero"));
                 user.setCodigoDeSeguridad(resultSet.getInt("codigodeseguridad"));

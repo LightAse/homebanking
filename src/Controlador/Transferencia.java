@@ -3,13 +3,13 @@ package Controlador;
 public class Transferencia {
 
     private long id;
-    private String destinatario;
-    private String remitente;
+    private long destinatario;
+    private long remitente;
     private Double cantidad;
     private String motivo;
     private String fecha;
 
-    public Transferencia(long id,String destinatario, String remitente, Double cantidad, String motivo,String fecha) {
+    public Transferencia(long id,long destinatario, long remitente, Double cantidad, String motivo,String fecha) {
         this.id = id;
         this.destinatario = destinatario;
         this.remitente = remitente;
@@ -26,19 +26,19 @@ public class Transferencia {
         this.id = id;
     }
 
-    public String getDestinatario() {
+    public long getDestinatario() {
         return destinatario;
     }
 
-    public void setDestinatario(String destinatario) {
+    public void setDestinatario(long destinatario) {
         this.destinatario = destinatario;
     }
 
-    public String getRemitente() {
+    public long getRemitente() {
         return remitente;
     }
 
-    public void setRemitente(String remitente) {
+    public void setRemitente(long remitente) {
         this.remitente = remitente;
     }
 

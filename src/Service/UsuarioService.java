@@ -4,6 +4,8 @@ import Controlador.Usuario;
 import Model.DAOException;
 import Model.DAOUsuario;
 
+import java.util.ArrayList;
+
 public class UsuarioService {
     private DAOUsuario daoUsuario;
 
@@ -73,4 +75,12 @@ public class UsuarioService {
 
     }
 
+    public ArrayList<Usuario> buscarTodos() {
+
+        try {
+            return daoUsuario.buscarTodos();
+        } catch (DAOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
