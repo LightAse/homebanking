@@ -14,17 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
-/* TODO
-*   Falta separar los metodos de calculos en su Service especifico
-*   Hay que crear la base de datos de Cuenta Corriente
-*   Hay que crear la base de datos de las Tarjetas
-*   Hay que crear la base de datos de las Transferencias(Historial)
-*   Hacer la interfaz de la Cuenta Corriente
-*   Hacer la interfaz de las Tarjetas
-*   Hacer la interfaz de las Transferencias
-*   Hacer la interfaz de los Historiales
-*   Hacer la interfaz del ADMIN
-*   Hacer la interfaz de los errores */
 
 public class MainWindow extends JFrame implements ActionListener {
 
@@ -53,23 +42,23 @@ public class MainWindow extends JFrame implements ActionListener {
         array_textfield = new JTextField[25];
         array_comboBox = new JComboBox[10];
 
-        Block block = new Block(Color.red,0,0,225,300);
+        Block block = new Block(Color.white,0,0,225,300);
         array_blockes[0] = block;
 
 
-        Block block1 = new Block(Color.green,225,0,300,750);//middle block
+        Block block1 = new Block(Color.white,225,0,300,750);//middle block
         array_blockes[1] = block1;
 
-        Block block2 = new Block(Color.blue,525,0,225,250);
+        Block block2 = new Block(Color.white,525,0,225,250);
         array_blockes[2] = block2;
 
-        Block block3 = new Block(Color.magenta,525,250,225,500);
+        Block block3 = new Block(Color.white,525,250,225,500);
         array_blockes[3] = block3;
 
-        Block block4 = new Block(Color.yellow,array_blockes[0].getX(),array_blockes[0].getY()+300,225,250);
+        Block block4 = new Block(Color.white,array_blockes[0].getX(),array_blockes[0].getY()+300,225,250);
         array_blockes[4] = block4;
 
-        Block block5 = new Block(Color.pink,array_blockes[4].getX(),array_blockes[4].getY()+250,225,200);
+        Block block5 = new Block(Color.white,array_blockes[4].getX(),array_blockes[4].getY()+250,225,200);
         array_blockes[5] = block5;
 
         this.setTitle("PowerBank");//Sets title of this
